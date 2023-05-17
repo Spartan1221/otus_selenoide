@@ -1,0 +1,82 @@
+plugins {
+    id 'java'
+    id 'io.qameta.allure' version '2.9.3'
+    id 'checkstyle'
+    id 'com.github.spotbugs' version '5.0.13'
+}
+
+group 'com.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    allureVersion = '2.16.1'
+    junitVersion = '5.8.1'
+    seleniumVersion = '3.141.59'
+    webdrivermanagerVersion = '4.2.0'
+    assertjVersion = '3.21.0'
+    browser = 'chrome'
+    baseUrl = 'https://otus.ru'
+    browserVersion = '112.0'
+    webDriverRemoteUrl = System.getProperty("webDriverRemoteUrl", "http://test:test-password@192.168.0.103:8080/wd/hub");
+}
+
+sourceCompatibility = '11'
+targetCompatibility = '11'
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+dependencies {
+    implementation("org.seleniumhq.selenium:selenium-java:${seleniumVersion}")
+    implementation("io.github.bonigarcia:webdrivermanager:${webdrivermanagerVersion}")
+    implementation("org.assertj:assertj-core:${assertjVersion}")
+    implementation('org.slf4j:slf4j-simple:1.7.30')
+
+
+    implementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
+    implementation("org.junit.jupiter:junit-jupiter:${junitVersion}")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
+}
+
+test {
+    maxParallelForks 3
+    useJUnitPlatform()
+    systemProperty "browser", "${browser}"
+    systemProperty "baseUrl", "${baseUrl}"
+    systemProperty "browserVersion", "${browserVersion}"
+    systemProperty "webDriverRemoteUrl", "${webDriverRemoteUrl}"
+}
+
+checkstyle {
+    toolVersion "8.12"
+    ignoreFailures false
+}
+
+checkstyleMain {
+    source ='src/main/java'
+}
+
+checkstyleTest {
+    source ='src/test/java'
+}
+
+spotbugs {
+    ignoreFailures = false
+    showStackTraces = true
+    showProgress = true
+}
+
+spotbugsMain {
+    reports {
+        html {
+            required = true
+            outputLocation = file("$buildDir/reports/spotbugs/main/spotbugs.html")
+            stylesheet = 'fancy-hist.xsl'
+        }
+    }
+}
