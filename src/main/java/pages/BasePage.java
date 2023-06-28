@@ -1,6 +1,7 @@
 package pages;
 
 import annotations.Path;
+import io.qameta.allure.Step;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -34,6 +35,7 @@ public abstract class BasePage<T> extends PageObject<T> {
         return "";
     }
 
+    @Step("Открыть страницу")
     public T open(){
         driver.get(baseUrl + getPath());
         return (T) this;

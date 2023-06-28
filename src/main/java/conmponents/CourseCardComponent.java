@@ -1,5 +1,6 @@
 package conmponents;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -26,11 +27,12 @@ public class CourseCardComponent extends AbsBaseComponent {
     private String courseStartDateOneSelector = ".lessons__new-item-bottom div[class='lessons__new-item-start']";
     private String courseStartDateTwoSelector = "div.lessons__new-item-bottom.lessons__new-item-bottom_spec > div.lessons__new-item-time";
 
+    @Step("Считывание заголовков курсов")
     public List<WebElement> getCourseTitles() {
         return driver.findElements(By.cssSelector(lessonsTitleSelector));
     }
 
-
+    @Step("Выбор курса по граничному значению")
     public CourseCardComponent clickOnCourseByBoundaryDate(Boolean isLatest) {
         BinaryOperator<Date> selectDate = null;
         if (isLatest){
@@ -49,6 +51,7 @@ public class CourseCardComponent extends AbsBaseComponent {
         return this;
     }
 
+    @Step("Выбор курса по дате")
     private void clickByCourseDate(Date date){
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
