@@ -1,8 +1,8 @@
 plugins {
     id 'java'
-    id 'io.qameta.allure' version '2.9.3'
     id 'checkstyle'
     id 'com.github.spotbugs' version '5.0.13'
+    id 'io.qameta.allure' version '2.8.1'
 }
 
 group 'com.example'
@@ -13,6 +13,7 @@ repositories {
 }
 
 ext {
+    aspectVersion = "1.9.5"
     allureVersion = '2.16.1'
     junitVersion = '5.8.1'
     seleniumVersion = '3.141.59'
@@ -37,6 +38,11 @@ dependencies {
     implementation("org.assertj:assertj-core:${assertjVersion}")
     implementation('org.slf4j:slf4j-simple:1.7.30')
 
+    implementation ("io.qameta.allure:allure-junit5:${allureVersion}")
+    implementation ("io.qameta.allure:allure-selenide:${allureVersion}")
+    implementation ("io.qameta.allure:allure-assertj:${allureVersion}")
+    implementation "org.aspectj:aspectjrt:${aspectVersion}"
+    implementation "org.aspectj:aspectjweaver:${aspectVersion}"
 
     implementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     implementation("org.junit.jupiter:junit-jupiter:${junitVersion}")
@@ -79,4 +85,21 @@ spotbugsMain {
             stylesheet = 'fancy-hist.xsl'
         }
     }
+}
+
+allure {
+    autoconfigure = true
+    aspectjweaver = true
+    version = "${allureVersion}"
+
+    useJUnit5 {
+        version = "${allureVersion}"
+    }
+
+    resultsDir = file('allure-results')
+    reportDir = file('allure-reports')
+}
+
+configurations {
+    testCompile
 }
