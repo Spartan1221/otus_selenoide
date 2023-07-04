@@ -15,7 +15,7 @@ timeout(180) {
       }
       stage('Checkout') {
         checkout scv
-      }
+      }K
       stage('Run tests') {
         tests_exit_code = sh(
             script: "gradle test -Dbrowser=$BROWSER_NAME -DbrowserVersion=$BROWSER_VERSION -DwebDriverRemoteUrl=$GRID_URL",
@@ -27,10 +27,10 @@ timeout(180) {
       }
       stage('Publish artifacts') {
         allure([
-            results          : [{
-                                  path: 'target/allure-results'
-                                }],
-            disabled         : false,
+            results: [{
+                path: 'target/allure-results'
+                      }],
+            disabled: false,
             reportBuildPolicy: ALWAYS
         ])
       }
@@ -56,4 +56,4 @@ timeout(180) {
       }
     }
   }
-}          Top
+}
