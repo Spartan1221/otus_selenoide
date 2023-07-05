@@ -14,15 +14,16 @@ repositories {
 
 ext {
     aspectVersion = "1.9.5"
-    allureVersion = '2.16.1'
+    allureVersion = '2.14.0'
     junitVersion = '5.8.1'
+    junitPioneerVersion = "1.4.2"
     seleniumVersion = '3.141.59'
     webdrivermanagerVersion = '4.2.0'
     assertjVersion = '3.21.0'
     browser = 'chrome'
     baseUrl = 'https://otus.ru'
     browserVersion = '112.0'
-    webDriverRemoteUrl = System.getProperty("webDriverRemoteUrl", "http://test:test-password@192.168.0.103:8080/wd/hub");
+    webDriverRemoteUrl = 'http://test:test-password@192.168.0.103:8080/wd/hub';
 }
 
 sourceCompatibility = '11'
@@ -41,10 +42,14 @@ dependencies {
     implementation ("io.qameta.allure:allure-junit5:${allureVersion}")
     implementation ("io.qameta.allure:allure-selenide:${allureVersion}")
     implementation ("io.qameta.allure:allure-assertj:${allureVersion}")
+    implementation "io.qameta.allure:allure-selenide:2.13.0"
     implementation "org.aspectj:aspectjrt:${aspectVersion}"
     implementation "org.aspectj:aspectjweaver:${aspectVersion}"
 
     implementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
+    implementation "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
+    implementation "org.junit.jupiter:junit-jupiter-params:${junitVersion}"
+    implementation "org.junit-pioneer:junit-pioneer:${junitPioneerVersion}"
     implementation("org.junit.jupiter:junit-jupiter:${junitVersion}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
 }
@@ -56,6 +61,23 @@ test {
     systemProperty "baseUrl", "${baseUrl}"
     systemProperty "browserVersion", "${browserVersion}"
     systemProperty "webDriverRemoteUrl", "${webDriverRemoteUrl}"
+}
+
+allure {
+    autoconfigure = true
+    aspectjweaver = true
+    version = "${allureVersion}"
+
+    useJUnit5 {
+        version = "${allureVersion}"
+    }
+
+    resultsDir = file('allure-results')
+    reportDir = file('allure-reports')
+}
+
+configurations {
+    testCompile
 }
 
 checkstyle {
